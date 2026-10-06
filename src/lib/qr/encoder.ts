@@ -142,7 +142,16 @@ function findVersion(
   return null;
 }
 
-export function encode(text: string, options: EncodeOptions): EncodeResult {
+/** Replace unpaired UTF-16 surrogates (which have no UTF-8 encoding) with U+FFFD. */
+export function wellFormed(text: string): string {
+  return text.replace(
+    /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g,
+    String.fromCharCode(0xfffd),
+  );
+}
+
+export function encode(input: string, options: EncodeOptions): EncodeResult {
+  const text = wellFormed(input);
   const level = options.level;
   const mode = options.mode ?? 'auto';
   if (text.length === 0) return { ok: false, error: { kind: 'empty' } };

@@ -18,6 +18,9 @@ export default defineConfig(
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // Sets and Maps here are built fresh inside $derived computations and never mutated
+      // afterwards, so Svelte's reactive collections would only add overhead.
+      'svelte/prefer-svelte-reactivity': 'off',
     },
   },
   {

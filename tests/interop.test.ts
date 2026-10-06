@@ -70,7 +70,7 @@ describe('our encoder → jsQR', () => {
       let text = randomText(rand, randomLength(rand));
       let r = encode(text, { level });
       while (!r.ok) {
-        text = text.slice(0, Math.floor(text.length * 0.7));
+        text = [...text].slice(0, Math.floor([...text].length * 0.7)).join('');
         r = encode(text, { level });
       }
       if (r.symbol.version === JSQR_BROKEN_VERSION && level === 'L')
@@ -136,7 +136,7 @@ describe('qrcode (npm) encoder → our decoder', () => {
         try {
           q = QRCode.create(text, { errorCorrectionLevel: level });
         } catch {
-          text = text.slice(0, Math.floor(text.length * 0.7));
+          text = [...text].slice(0, Math.floor([...text].length * 0.7)).join('');
         }
       }
       const size = q.modules.size;
@@ -173,7 +173,7 @@ describe('qrcode (npm) encoder → our decoder', () => {
         const text = 'qz' + 'x'.repeat(v);
         const ours = encode(text, { level, version: v, mask: 3, mode: 'byte' });
         if (!ours.ok) throw new Error('encode');
-        const q = QRCode.create([{ data: text, mode: 'byte' }], {
+        const q = QRCode.create([{ data: Buffer.from(text, 'utf8'), mode: 'byte' }], {
           errorCorrectionLevel: level,
           version: v,
           maskPattern: 3 as 0,

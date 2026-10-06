@@ -200,3 +200,13 @@ describe('encoder — structure', () => {
     for (const p of s.penalties) expect(p.total).toBe(p.n1 + p.n2 + p.n3 + p.n4);
   });
 });
+
+describe('encoder — unpaired surrogates', () => {
+  it('replaces a lone surrogate with U+FFFD so the decoded text matches the symbol text', async () => {
+    const { decodeGrid } = await import('../src/lib/qr/decoder');
+    const r = encode('moon \uD83C', { level: 'M' });
+    if (!r.ok) throw new Error('encode');
+    expect(r.symbol.text).toBe('moon \uFFFD');
+    expect(decodeGrid(r.symbol.modules, r.symbol.size).text).toBe(r.symbol.text);
+  });
+});
