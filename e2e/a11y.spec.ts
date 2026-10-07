@@ -2,6 +2,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test('has no serious or critical WCAG 2.2 AA violations', async ({ page }) => {
+  // The page is long (story and explanations included); axe needs more than the default 30 s
+  // when many browsers run in parallel.
+  test.setTimeout(120_000);
   await page.goto('./');
   await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', { timeout: 20_000 });
 
