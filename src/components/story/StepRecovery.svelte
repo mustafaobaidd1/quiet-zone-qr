@@ -190,7 +190,9 @@
               ? ' on the erasure-adjusted (Forney) syndromes'
               : ''}
           </p>
-          <div class="bm-wrap">
+          <!-- Scrollable region: focusable so keyboard users can scroll it (WCAG 2.1.1). -->
+          <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+          <div class="bm-wrap" role="region" aria-label="Berlekamp–Massey iterations" tabindex="0">
             <table class="bm mono">
               <thead
                 ><tr
@@ -337,8 +339,8 @@
   }
 
   .blocks button.bad[aria-pressed='true'] {
-    background: var(--vermilion);
-    border-color: var(--vermilion);
+    background: var(--vermilion-ink);
+    border-color: var(--vermilion-ink);
     color: #fff;
   }
 
@@ -405,7 +407,7 @@
   .cell.wrong {
     border-color: var(--vermilion);
     background: var(--vermilion);
-    color: #fff;
+    color: var(--ink);
   }
 
   .cell.erased {
@@ -420,11 +422,12 @@
     background:
       repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.35) 0 2px, transparent 2px 5px),
       var(--vermilion);
-    color: #fff;
+    color: var(--ink);
   }
 
   .cell.syn.zero {
-    color: #a4a49b;
+    color: var(--ink-3);
+    border-style: dotted;
   }
 
   .cell.fixed {
@@ -509,7 +512,7 @@
   }
 
   .bm tr:not(.jump) td {
-    color: #8f8f87;
+    color: var(--ink-3);
   }
 
   .poly {

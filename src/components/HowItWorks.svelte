@@ -91,7 +91,7 @@
         </p>
         <p
           class="eq"
-          use:tex={'a \\cdot b = \\alpha^{(\\log_\\alpha a \\, + \\, \\log_\\alpha b) \\bmod 255}, \\qquad a + b = a \\oplus b'}
+          use:tex={'\\begin{gathered} a \\cdot b = \\alpha^{(\\log_\\alpha a \\, + \\, \\log_\\alpha b) \\bmod 255} \\\\ a + b = a \\oplus b \\end{gathered}'}
           data-display="true"
         >
           a · b = α^((log a + log b) mod 255), a + b = a XOR b
@@ -110,7 +110,7 @@
         </p>
         <p
           class="eq"
-          use:tex={'g(x) = \\prod_{i=0}^{n-k-1} \\left(x - \\alpha^{i}\\right), \\qquad c(x) = m(x)\\,x^{n-k} + \\left[\\, m(x)\\,x^{n-k} \\bmod g(x) \\,\\right]'}
+          use:tex={'\\begin{gathered} g(x) = \\prod_{i=0}^{n-k-1} \\left(x - \\alpha^{i}\\right) \\\\ c(x) = m(x)\\,x^{n-k} + \\left[\\, m(x)\\,x^{n-k} \\bmod g(x) \\,\\right] \\end{gathered}'}
           data-display="true"
         >
           g(x) = ∏ (x − α^i), c(x) = m(x)·x^(n−k) + [m(x)·x^(n−k) mod g(x)]
@@ -156,7 +156,7 @@
         </p>
         <p
           class="eq"
-          use:tex={'S_j = r(\\alpha^{j}) = e(\\alpha^{j}) = \\sum_{l} e_l\\, X_l^{\\,j}, \\qquad j = 0, \\dots, n-k-1'}
+          use:tex={'\\begin{gathered} S_j = r(\\alpha^{j}) = e(\\alpha^{j}) = \\sum_{l} e_l\\, X_l^{\\,j} \\\\ j = 0, 1, \\dots, n-k-1 \\end{gathered}'}
           data-display="true"
         >
           S_j = r(α^j) = Σ e_l X_l^j
@@ -169,7 +169,7 @@
         </p>
         <p
           class="eq"
-          use:tex={"\\Lambda(x) = \\prod_{l} \\left(1 - X_l\\, x\\right), \\qquad \\Omega(x) = S(x)\\,\\Lambda(x) \\bmod x^{\\,n-k}, \\qquad e_l = X_l \\, \\frac{\\Omega(X_l^{-1})}{\\Lambda'(X_l^{-1})}"}
+          use:tex={"\\begin{gathered} \\Lambda(x) = \\prod_{l} \\left(1 - X_l\\, x\\right) \\\\ \\Omega(x) = S(x)\\,\\Lambda(x) \\bmod x^{\\,n-k} \\\\[4pt] e_l = X_l \\, \\frac{\\Omega(X_l^{-1})}{\\Lambda'(X_l^{-1})} \\end{gathered}"}
           data-display="true"
         >
           Λ(x) = ∏ (1 − X_l x), Ω(x) = S(x)Λ(x) mod x^(n−k), e_l = X_l Ω(X_l⁻¹)/Λ′(X_l⁻¹)
@@ -559,6 +559,12 @@
 
   .eq :global(.katex) {
     font-size: 1.15em;
+  }
+
+  @media (max-width: 480px) {
+    .eq :global(.katex) {
+      font-size: 1em;
+    }
   }
 
   .eq:global([data-typeset='true']) {

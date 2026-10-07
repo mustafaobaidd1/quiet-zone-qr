@@ -3,6 +3,8 @@
   import { probe, ROLES } from '../lib/roles';
   import { app } from '../lib/state.svelte';
 
+  const reducedMotion =
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sym = $derived(app.symbol);
   const dmg = $derived(app.damage);
   const info = $derived(sym && app.probeIndex !== null ? probe(sym, app.probeIndex) : null);
@@ -83,7 +85,9 @@
       <li><span class="k added" aria-hidden="true"></span>Ink added — module should be light</li>
       <li><span class="k missing" aria-hidden="true"></span>Ink missing — module should be dark</li>
       <li>
-        <span class="k repaired" aria-hidden="true"></span>Flashes when the decoder repairs a bit
+        <span class="k repaired" aria-hidden="true"></span>{reducedMotion
+          ? 'Bit the decoder repaired'
+          : 'Flashes when the decoder repairs a bit'}
       </li>
     </ul>
   </div>

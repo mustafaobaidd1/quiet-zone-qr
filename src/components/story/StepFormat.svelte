@@ -244,7 +244,8 @@
   }
 
   .dim {
-    color: #a4a49b;
+    color: var(--ink-3);
+    font-weight: 300;
   }
 
   .gen .bits {

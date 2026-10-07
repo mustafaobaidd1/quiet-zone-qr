@@ -95,6 +95,6 @@
   }
 
   .all:disabled {
-    color: #a1a199;
+    color: var(--ink-3);
   }
 </style>

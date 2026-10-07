@@ -91,7 +91,9 @@
         <path d={patternPath} fill="var(--ink)" />
       </svg>
     </div>
-    <div class="table-wrap">
+    <!-- Scrollable region: focusable so keyboard users can scroll it (WCAG 2.1.1). -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class="table-wrap" role="region" aria-label="Mask penalty table" tabindex="0">
       <table class="pen num">
         <thead>
           <tr>

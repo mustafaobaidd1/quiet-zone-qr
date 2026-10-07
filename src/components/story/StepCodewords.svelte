@@ -72,7 +72,9 @@
     <li class="total">capacity <span class="num">{fmt(total)} bits</span></li>
   </ul>
 
-  <div class="hex-wrap">
+  <!-- Scrollable region: focusable so keyboard users can scroll it (WCAG 2.1.1). -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div class="hex-wrap" role="region" aria-label="Data codewords table" tabindex="0">
     <table class="hex mono" aria-label="Data codewords in hexadecimal">
       <thead>
         <tr>
@@ -210,7 +212,7 @@
   }
 
   .hex td.pad {
-    color: #8a8a82;
+    color: var(--ink-3);
     background: repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.035) 0 2px, transparent 2px 5px);
   }
 

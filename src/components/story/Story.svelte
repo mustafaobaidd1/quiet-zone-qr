@@ -23,6 +23,7 @@
 
   let current = $state(0);
   let section: HTMLElement | undefined = $state();
+  let stepper: HTMLDivElement | undefined = $state();
   let visible = $state(false);
   const tabs: HTMLButtonElement[] = [];
 
@@ -40,7 +41,18 @@
 
   function go(i: number, focus = false) {
     current = Math.max(0, Math.min(STEPS.length - 1, i));
-    if (focus) tabs[current]?.focus();
+    if (focus) tabs[current]?.focus({ preventScroll: true });
+    // On narrow screens the stepper scrolls sideways: keep the active step in view without
+    // moving the page vertically.
+    const tab = tabs[current];
+    if (stepper && tab && stepper.scrollWidth > stepper.clientWidth) {
+      const left = tab.offsetLeft - stepper.offsetLeft;
+      const target = Math.max(0, left - (stepper.clientWidth - tab.offsetWidth) / 2);
+      stepper.scrollTo({
+        left: target,
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    }
   }
 
   function onTabKey(e: KeyboardEvent) {
@@ -77,7 +89,7 @@
     {/if}
   </div>
 
-  <div class="stepper" role="tablist" aria-label="Story steps">
+  <div class="stepper" role="tablist" aria-label="Story steps" bind:this={stepper}>
     {#each STEPS as s, i (s.id)}
       <button
         type="button"
@@ -346,7 +358,7 @@
     }
 
     .big-n {
-      font-size: 88px;
+      font-size: 72px;
     }
 
     .panel-grid :global(.step-viz) {

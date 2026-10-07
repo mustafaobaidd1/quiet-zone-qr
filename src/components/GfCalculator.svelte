@@ -155,7 +155,9 @@
         >log: x → i</button
       >
     </div>
-    <div class="grid-wrap">
+    <!-- Scrollable region: focusable so keyboard users can scroll it (WCAG 2.1.1). -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class="grid-wrap" role="region" aria-label="GF(256) table" tabindex="0">
       <table
         class="gf mono"
         aria-label={table === 'exp'
@@ -360,7 +362,7 @@
   }
 
   .gf td.na {
-    color: #b7b7ae;
+    color: var(--ink-3);
   }
 
   .note {

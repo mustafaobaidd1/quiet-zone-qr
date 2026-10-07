@@ -112,7 +112,9 @@
       <span>Press play to deal the codewords out</span>
     {/if}
   </div>
-  <div class="svg-wrap">
+  <!-- Scrollable region: focusable so keyboard users can scroll it (WCAG 2.1.1). -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div class="svg-wrap" role="region" aria-label="Interleaving diagram" tabindex="0">
     <svg
       viewBox="-34 -4 {W + 38} {H + 8}"
       role="img"

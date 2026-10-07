@@ -368,6 +368,7 @@
 
   function onBlur() {
     keyboardFocus = false;
+    if (cursor !== null && app.probeIndex === cursor) app.probeIndex = null;
     cursor = null;
   }
 

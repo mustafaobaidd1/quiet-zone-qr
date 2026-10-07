@@ -161,6 +161,7 @@
     font-size: 17px;
     line-height: 1.45;
     max-width: 34em;
+    text-wrap: pretty;
   }
 
   .pointer-note {

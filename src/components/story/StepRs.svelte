@@ -108,7 +108,15 @@
 
   <PlayerControls {player} label="polynomial division" unit="step" />
 
-  <div class="table-wrap" bind:this={tableWrap}>
+  <!-- Scrollable region: focusable so keyboard users can scroll it (WCAG 2.1.1). -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div
+    class="table-wrap"
+    bind:this={tableWrap}
+    role="region"
+    aria-label="Polynomial division, one row per step"
+    tabindex="0"
+  >
     <table class="rs mono">
       <thead>
         <tr>
@@ -138,15 +146,17 @@
     </table>
   </div>
 
-  <div class="result" class:ready={done}>
+  <div class="result">
     <p class="label">EC codewords of block {block.index + 1}</p>
-    <p class="mono ec">
-      {#each Array.from(block.ec) as v, i (i)}<span>{hex(v)}</span>{/each}
-    </p>
     {#if done}
+      <p class="mono ec" data-testid="rs-ec">
+        {#each Array.from(block.ec) as v, i (i)}<span>{hex(v)}</span>{/each}
+      </p>
       <p class="check">
         Register after {rows.length} steps = the {d} EC codewords placed in the symbol.
       </p>
+    {:else}
+      <p class="waiting">The remainder appears after the last of the {rows.length} steps.</p>
     {/if}
   </div>
 </div>
@@ -272,12 +282,12 @@
 
   .result {
     margin-top: 16px;
-    opacity: 0.45;
-    transition: opacity 200ms var(--ease);
   }
 
-  .result.ready {
-    opacity: 1;
+  .waiting {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-3);
   }
 
   .ec {

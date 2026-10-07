@@ -59,9 +59,11 @@
           </div>
         {/each}
         {#if seg.chunks.length > shown(si)}
-          <button type="button" class="more" onclick={() => (expanded[si] = true)}>
-            + {fmt(seg.chunks.length - shown(si))} more
-          </button>
+          <div role="listitem" class="more-item">
+            <button type="button" class="more" onclick={() => (expanded[si] = true)}>
+              + {fmt(seg.chunks.length - shown(si))} more
+            </button>
+          </div>
         {/if}
       </div>
     </div>
@@ -142,6 +144,10 @@
     letter-spacing: 0.04em;
     color: var(--ink);
     overflow-wrap: anywhere;
+  }
+
+  .more-item {
+    display: flex;
   }
 
   .more {

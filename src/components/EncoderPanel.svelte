@@ -4,9 +4,9 @@
   import { app } from '../lib/state.svelte';
 
   const MODES: { id: ModeChoice; label: string }[] = [
-    { id: 'auto', label: 'Auto (optimal segments)' },
+    { id: 'auto', label: 'Auto (optimal)' },
     { id: 'numeric', label: 'Numeric 0–9' },
-    { id: 'alphanumeric', label: 'Alphanumeric A–Z 0–9 $%*+-./: space' },
+    { id: 'alphanumeric', label: 'Alphanumeric' },
     { id: 'byte', label: 'Byte (UTF-8)' },
   ];
   const MODE_NAMES: Record<string, string> = {
@@ -119,7 +119,7 @@
     <div class="control">
       <label class="label" for="mask">Mask</label>
       <select id="mask" value={maskValue} onchange={setMask} data-testid="mask">
-        <option value="auto">Auto (lowest penalty)</option>
+        <option value="auto">Auto (lowest)</option>
         {#each [0, 1, 2, 3, 4, 5, 6, 7] as m (m)}
           <option value={String(m)}>Mask {m}</option>
         {/each}
