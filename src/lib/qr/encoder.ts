@@ -32,6 +32,7 @@ import {
   dataCapacityBits,
   MAX_VERSION,
   MIN_VERSION,
+  versionGroup,
   type BlockLayout,
   type EcLevel,
 } from './tables';
@@ -133,8 +134,16 @@ function findVersion(
   level: EcLevel,
   from = MIN_VERSION,
 ): { version: number; segments: Segment[]; bits: number } | null {
+  // Segmentation only depends on the character-count widths, i.e. on the version range
+  // (1–9, 10–26, 27–40), so it is computed at most three times.
+  const byGroup = new Map<number, Segment[]>();
   for (let v = from; v <= MAX_VERSION; v++) {
-    const segs = segmentsFor(text, mode, v);
+    const group = versionGroup(v);
+    let segs = byGroup.get(group);
+    if (!segs) {
+      segs = segmentsFor(text, mode, v);
+      byGroup.set(group, segs);
+    }
     const bits = segmentsBitLength(segs, v);
     if (bits !== null && bits <= dataCapacityBits(v, level))
       return { version: v, segments: segs, bits };
@@ -167,8 +176,10 @@ export function encode(input: string, options: EncodeOptions): EncodeResult {
     if (!chosen) {
       const segs = segmentsFor(text, mode, MAX_VERSION);
       const bits = segmentsBitLength(segs, MAX_VERSION) ?? Number.POSITIVE_INFINITY;
+      // Capacity grows with the version far faster than segment headers do, so a text that
+      // fits any version at a level also fits version 40 at that level.
       const fitsAtLevel =
-        (['L', 'M', 'Q', 'H'] as EcLevel[]).find((l) => findVersion(text, mode, l) !== null) ??
+        (['L', 'M', 'Q', 'H'] as EcLevel[]).find((l) => bits <= dataCapacityBits(MAX_VERSION, l)) ??
         null;
       return {
         ok: false,

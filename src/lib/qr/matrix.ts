@@ -249,8 +249,9 @@ export interface Penalty {
   darkRatio: number;
 }
 
-const FINDER_LIKE_A = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0];
-const FINDER_LIKE_B = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1];
+/** 1:1:3:1:1 finder-like runs with four light modules after (A) or before (B), as 11 bits. */
+const FINDER_LIKE_A = 0b10111010000;
+const FINDER_LIKE_B = 0b00001011101;
 
 /**
  * The four penalty rules as worded in ISO/IEC 18004 §7.8.3 and Thonky's tutorial, evaluated
@@ -260,42 +261,44 @@ export function penalty(modules: Uint8Array, size: number, mask = -1): Penalty {
   let n1 = 0;
   let n2 = 0;
   let n3 = 0;
-  const at = (r: number, c: number) => modules[r * size + c];
 
+  // Rules 1 and 3 scan every row and every column as a line of modules. Rule 3 keeps the last
+  // 11 modules as an 11-bit window and compares it with the two finder-like patterns.
   for (let pass = 0; pass < 2; pass++) {
-    const get = pass === 0 ? at : (r: number, c: number) => at(c, r);
-    for (let r = 0; r < size; r++) {
-      // Rule 1.
+    const along = pass === 0 ? 1 : size; // step between neighbours in the line
+    const across = pass === 0 ? size : 1; // step between lines
+    for (let line = 0; line < size; line++) {
+      const base = line * across;
       let run = 1;
-      for (let c = 1; c < size; c++) {
-        if (get(r, c) === get(r, c - 1)) {
+      let prev = modules[base];
+      let window = prev;
+      for (let k = 1; k < size; k++) {
+        const v = modules[base + k * along];
+        if (v === prev) {
           run++;
         } else {
           if (run >= 5) n1 += 3 + (run - 5);
           run = 1;
+          prev = v;
         }
+        window = ((window << 1) | v) & 0x7ff;
+        if (k >= 10 && (window === FINDER_LIKE_A || window === FINDER_LIKE_B)) n3 += 40;
       }
       if (run >= 5) n1 += 3 + (run - 5);
-      // Rule 3.
-      for (let c = 0; c + 11 <= size; c++) {
-        let a = true;
-        let b = true;
-        for (let k = 0; k < 11 && (a || b); k++) {
-          const v = get(r, c + k);
-          if (v !== FINDER_LIKE_A[k]) a = false;
-          if (v !== FINDER_LIKE_B[k]) b = false;
-        }
-        if (a) n3 += 40;
-        if (b) n3 += 40;
-      }
     }
   }
 
   // Rule 2.
   for (let r = 0; r + 1 < size; r++) {
+    const row = r * size;
     for (let c = 0; c + 1 < size; c++) {
-      const v = at(r, c);
-      if (v === at(r, c + 1) && v === at(r + 1, c) && v === at(r + 1, c + 1)) n2 += 3;
+      const v = modules[row + c];
+      if (
+        v === modules[row + c + 1] &&
+        v === modules[row + size + c] &&
+        v === modules[row + size + c + 1]
+      )
+        n2 += 3;
     }
   }
 
@@ -303,9 +306,9 @@ export function penalty(modules: Uint8Array, size: number, mask = -1): Penalty {
   let dark = 0;
   for (let i = 0; i < modules.length; i++) dark += modules[i];
   const percent = (dark * 100) / modules.length;
-  const prev = Math.floor(percent / 5) * 5;
-  const next = prev + 5;
-  const n4 = Math.min(Math.abs(prev - 50) / 5, Math.abs(next - 50) / 5) * 10;
+  const prevFive = Math.floor(percent / 5) * 5;
+  const nextFive = prevFive + 5;
+  const n4 = Math.min(Math.abs(prevFive - 50) / 5, Math.abs(nextFive - 50) / 5) * 10;
 
   return { mask, n1, n2, n3, n4, total: n1 + n2 + n3 + n4, darkRatio: dark / modules.length };
 }

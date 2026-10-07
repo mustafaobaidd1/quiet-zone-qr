@@ -102,6 +102,9 @@ function toCorner(corner: Corner, x: number, y: number): [number, number] {
 
 const SQRT1_2 = Math.SQRT1_2;
 
+/** Upper bound of |tearProfile(t)|: sine amplitudes 0.07 + 0.03 + 0.012 plus the random walk. */
+const TEAR_AMPLITUDE = 0.2;
+
 /**
  * The jagged tear profile: offset (normalised units, along the inward diagonal) as a function of
  * position t ∈ [0, 1] along the tear. A sum of a few seeded sine octaves plus a small random walk
@@ -159,6 +162,9 @@ function isTorn(
   const len = Math.SQRT2 * (op.depth + 2 * quiet);
   const along = ((u - v) * SQRT1_2 + (op.depth + 2 * quiet) * SQRT1_2) / len;
   const normal = (u + v - op.depth) * SQRT1_2;
+  // The jagged profile never strays more than TEAR_AMPLITUDE from the straight line.
+  if (normal > TEAR_AMPLITUDE) return false;
+  if (normal < -TEAR_AMPLITUDE) return true;
   return normal < profile(Math.max(0, Math.min(1, along)));
 }
 
