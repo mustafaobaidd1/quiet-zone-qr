@@ -8,7 +8,8 @@ const shots = [
   { file: 'docs/screenshots/desktop.png', width: 1440, height: 900, scale: 1 },
   { file: 'docs/screenshots/tablet.png', width: 834, height: 1112, scale: 1 },
   { file: 'docs/screenshots/mobile.png', width: 390, height: 844, scale: 2 },
-  { file: 'public/og-image.png', width: 1200, height: 630, scale: 1 },
+  // The social preview hides the tool rows, which the 630 px crop would cut in half.
+  { file: 'public/og-image.png', width: 1200, height: 630, scale: 1, hide: '.toolbar, .export' },
 ];
 
 const server = await preview();
@@ -27,6 +28,8 @@ try {
     });
     await page.goto(url);
     await page.waitForSelector('html[data-ready="true"]', { timeout: 30_000 });
+    if (shot.hide)
+      await page.addStyleTag({ content: `${shot.hide} { visibility: hidden !important; }` });
     // Give animations and simulations a moment to reach a representative frame.
     await page.waitForTimeout(Number(process.env.SHOT_DELAY ?? 2500));
     await page.screenshot({ path: shot.file });

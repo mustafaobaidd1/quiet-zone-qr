@@ -236,10 +236,10 @@
         {/if}
         <p class="aside">
           The level names promise roughly 7, 15, 25 and 30% recovery. A symbol fails as soon as any
-          one block fails, so the real limit is the worst block, not the total. For the four
-          smallest symbols (1-L, 1-M, 1-Q, 2-L, 3-L) the standard also reserves a few “misdecode
-          protection” codewords and suggests correcting slightly fewer errors; this decoder, like
-          most, uses the full ⌊d/2⌋.
+          one block fails, so the real limit is the worst block, not the total. For a few of the
+          smallest symbols the standard keeps some check codewords as “misdecode protection” and
+          lists a slightly lower correction capacity; this decoder, like most, corrects the full
+          ⌊d/2⌋.
         </p>
       </article>
 
@@ -308,39 +308,24 @@
           {#if sym}
             <figure class="qz-fig">
               <svg
-                viewBox="-2 -3 {qzTotal + 4} {qzTotal + 5}"
+                viewBox="-1 -5 {qzTotal + 2} {qzTotal + 6}"
                 role="img"
-                aria-label="The code with its four-module quiet zone marked"
+                aria-label="The code with its four-module quiet zone shaded"
               >
-                <rect
-                  x="0"
-                  y="0"
-                  width={qzTotal}
-                  height={qzTotal}
-                  fill="#fff"
-                  stroke="#111"
-                  stroke-width="0.12"
-                />
-                <path d={qzPath} fill="#111" />
+                <rect x="0" y="0" width={qzTotal} height={qzTotal} class="qz-band" />
                 <rect
                   x={QUIET_ZONE}
                   y={QUIET_ZONE}
                   width={qzTotal - 2 * QUIET_ZONE}
                   height={qzTotal - 2 * QUIET_ZONE}
-                  fill="none"
-                  stroke="var(--cobalt)"
-                  stroke-width="0.12"
-                  stroke-dasharray="0.5 0.35"
+                  fill="#fff"
                 />
-                <path
-                  d="M0 -1.4H{QUIET_ZONE}M0 -2v1.2M{QUIET_ZONE} -2v1.2"
-                  stroke="var(--cobalt)"
-                  stroke-width="0.12"
-                  fill="none"
-                />
-                <text x={QUIET_ZONE / 2} y="-2" text-anchor="middle" class="dim-label">4</text>
+                <path d={qzPath} fill="#111" />
+                <rect x="0" y="0" width={qzTotal} height={qzTotal} class="qz-edge" />
+                <path d="M0 -1.8H{QUIET_ZONE}M0 -2.6v1.6M{QUIET_ZONE} -2.6v1.6" class="qz-dim" />
+                <text x={QUIET_ZONE / 2} y="-3.2" text-anchor="middle" class="dim-label">4</text>
               </svg>
-              <figcaption>Dashed: the symbol. Outside it, 4 modules of quiet zone.</figcaption>
+              <figcaption>Shaded: the 4-module quiet zone around the symbol.</figcaption>
             </figure>
           {/if}
         </div>
@@ -643,7 +628,7 @@
 
   .quiet {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 240px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 260px);
     gap: 28px;
     align-items: start;
   }
@@ -663,9 +648,25 @@
     shape-rendering: crispEdges;
   }
 
+  .qz-band {
+    fill: var(--cobalt-soft);
+  }
+
+  .qz-edge {
+    fill: none;
+    stroke: var(--cobalt);
+    stroke-width: 0.15;
+  }
+
+  .qz-dim {
+    fill: none;
+    stroke: var(--cobalt);
+    stroke-width: 0.18;
+  }
+
   .dim-label {
     font-family: var(--font-mono);
-    font-size: 1.4px;
+    font-size: 2.4px;
     fill: var(--cobalt);
   }
 

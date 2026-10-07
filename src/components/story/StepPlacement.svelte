@@ -189,7 +189,7 @@
     stroke-width: 0.09;
     stroke-linejoin: round;
     shape-rendering: geometricPrecision;
-    opacity: 0.9;
+    opacity: 0.75;
   }
 
   .cw {

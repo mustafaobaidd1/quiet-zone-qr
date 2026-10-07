@@ -174,10 +174,17 @@
 <footer class="footer">
   <div class="foot-grid">
     <p class="foot-title">Quiet Zone</p>
-    <p>
-      Built by Mustafa Obaid. Encoder, decoder and Reed–Solomon codec written from scratch in
-      TypeScript; validated against published worked examples and two independent QR libraries.
-    </p>
+    <div class="foot-about">
+      <p>
+        Built by Mustafa Obaid. Encoder, decoder and Reed–Solomon codec written from scratch in
+        TypeScript; validated against published worked examples and two independent QR libraries.
+      </p>
+      <p class="credits">
+        Credits: Geist and Geist Mono fonts (SIL Open Font License 1.1) · KaTeX (MIT) · Svelte (MIT)
+        · reference values from ISO/IEC 18004, Thonky’s QR Code Tutorial and Wikiversity’s
+        “Reed–Solomon codes for coders”.
+      </p>
+    </div>
     <p class="foot-links">
       <a class="link" href="https://mustafaobaidd1.github.io/">← Portfolio</a>
       <a class="link" href="https://github.com/mustafaobaidd1/quiet-zone-qr">Source code</a>
@@ -521,6 +528,16 @@
     color: var(--ink);
   }
 
+  .foot-about {
+    display: grid;
+    gap: 10px;
+  }
+
+  .credits {
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
   .foot-links {
     display: flex;
     flex-wrap: wrap;
@@ -532,7 +549,7 @@
       grid-column: 1 / span 3;
     }
 
-    .foot-grid > p:nth-child(2) {
+    .foot-about {
       grid-column: 4 / span 5;
     }
 

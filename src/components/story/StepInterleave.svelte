@@ -138,7 +138,7 @@
               curInfo &&
               curInfo.block === b &&
               curInfo.indexInBlock === i}
-            class:gone={used}
+            class:gone={used && !player.done}
           />
         {/each}
       {/each}
