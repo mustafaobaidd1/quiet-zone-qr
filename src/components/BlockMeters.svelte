@@ -59,11 +59,11 @@
             <span class="name">Block {b.index + 1}</span>
             <span class="caption">
               {#if b.miscorrected}
-                miscorrected — wrong codeword
+                wrong codeword
               {:else if !b.ok && erasureView}
-                {errorsShown(b)} errors + {b.erasures} erasures — over budget
+                over budget
               {:else if !b.ok}
-                {errorsShown(b)} wrong — decoder gave up
+                decoder gave up
               {:else if erasureView}
                 2 × {b.corrected} errors + {b.erasures} erasures
               {:else if b.corrected === 0}
@@ -80,7 +80,7 @@
                 <span class="tick" style:left="{((k + 1) * step * 100) / limit}%"></span>
               {/each}
             </span>
-            <span class="spill" style:width="{(spill / OVER) * 25}%"></span>
+            <span class="spill" style:width="calc({(spill / OVER) * 20}% - 2px)"></span>
             <span class="limit"></span>
           </span>
         </span>
@@ -195,13 +195,15 @@
 
   .head {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 12px;
+    gap: 0 12px;
     padding-right: 20%;
   }
 
   .name {
+    white-space: nowrap;
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.04em;
@@ -209,6 +211,7 @@
   }
 
   .caption {
+    margin-left: auto;
     font-size: 12px;
     color: var(--ink-3);
     text-align: right;

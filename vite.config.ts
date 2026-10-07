@@ -17,5 +17,8 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
+    // Several suites are exhaustive (every GF(256) triple, every format error pattern) and the
+    // interoperability tests decode hundreds of images; give them room on a busy machine.
+    testTimeout: 60_000,
   },
 });

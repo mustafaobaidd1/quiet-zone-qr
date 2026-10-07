@@ -197,7 +197,10 @@ export function analyse(symbol: QrSymbol, damage: DamageState, erasureMode: bool
         detail = `${f.reason}.`;
       }
       if (failing.length > 1) {
-        detail += ` ${failing.length - 1} more block${failing.length > 2 ? 's' : ''} failed too.`;
+        detail +=
+          failing.length === 2
+            ? ` Block ${failing[1].index + 1} failed too.`
+            : ` ${failing.length - 1} other blocks failed too.`;
       }
     } else if (f?.stage === 'segments') {
       detail = `The corrected data does not parse: ${f.reason}.`;

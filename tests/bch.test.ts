@@ -31,6 +31,8 @@ describe('format information (BCH 15,5)', () => {
   });
 
   it('corrects every pattern of up to 3 bit errors', () => {
+    const failures: string[] = [];
+    let patterns = 0;
     for (const row of ref.format) {
       const good = Number.parseInt(row.bits, 2);
       for (let a = 0; a < 15; a++) {
@@ -38,13 +40,19 @@ describe('format information (BCH 15,5)', () => {
           for (let c = b; c < 15; c++) {
             const read = good ^ (1 << a) ^ (a === b ? 0 : 1 << b) ^ (b === c ? 0 : 1 << c);
             const d = decodeFormatBits(read);
-            expect(d.ok).toBe(true);
-            expect(d.value).toEqual({ level: row.level, mask: row.mask });
-            expect(d.distance).toBe(popcount(read ^ good));
+            patterns++;
+            const ok =
+              d.ok &&
+              d.value?.level === row.level &&
+              d.value?.mask === row.mask &&
+              d.distance === popcount(read ^ good);
+            if (!ok) failures.push(`${row.level}${row.mask} read ${read.toString(2)}`);
           }
         }
       }
     }
+    expect(failures).toEqual([]);
+    expect(patterns).toBe(32 * 680);
   });
 
   it('flags reads that are 4 or more bits from every codeword', () => {
